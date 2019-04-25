@@ -84,33 +84,33 @@ $(document).on("click", ".comment", function () {
 //===============================//
 //Creating new COMMENT//
 
-$(document).on("click", "#closeBtn", function () {
-  var thisId = $(this).val().trim();
-  console.log(thisId)
-  $.ajax({
-    type: "POST",
-    url: "/comment/" +
-      selected.attr("data-id"),
-    dataType: "json",
-    data: {
-      note: $("#exampleFormControlTextarea1").val()
-    },
-    // On successful call
-    success: function (data) {
-      $("#exampleFormControlTextarea1").val("");
-      $.ajax({
-        type: "GET",
-        url: "/find/" + selected.attr("data-id"),
-        // On a successful call, clear the #results section
-        success: function(data) {
-    var notesmsgnew = $("<div>");
-    notesmsgnew.attr("class", "notesmsgnew")
-    notesaveddiv.prepend(notesmsgnew);
-    notesmsgnew.text(data.note);
-    });
-  createComment();
-})
-
+// $(document).on("click", "#closeBtn", function () {
+//   var thisId = $(this).val().trim();
+//   console.log(thisId)
+//   $.ajax({
+//     type: "POST",
+//     url: "/comment/" +
+//       selected.attr("data-id"),
+//     dataType: "json",
+//     data: {
+//       note: $("#exampleFormControlTextarea1").val()
+//     },
+//     // On successful call
+//     success: function (data) {
+//       $("#exampleFormControlTextarea1").val("");
+//       $.ajax({
+//         type: "GET",
+//         url: "/find/" + selected.attr("data-id"),
+//         // On a successful call, clear the #results section
+//         success: function(data) {
+//     var notesmsgnew = $("<div>");
+//     notesmsgnew.attr("class", "notesmsgnew")
+//     notesaveddiv.prepend(notesmsgnew);
+//     notesmsgnew.text(data.note);
+//     });
+//   createComment();
+// })
+//===================================//
 // function displayResults(articles) {
 //     // First, empty the table
 //     $(".tbody").empty();
