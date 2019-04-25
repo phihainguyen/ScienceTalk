@@ -36,20 +36,20 @@ db.on("error", function (error) {
 // 		}
 // 	});
 // });
-app.get("/saved", function(req, res) {
-  // Go into the mongo collection, and find all docs where "read" is true
-  db.scrapedArticle.find({ saved: true }, function(error, found) {
-    // Show any errors
-    if (error) {
-      console.log(error);
-    }
-    else {
-      // Otherwise, send the books we found to the browser as a json
+app.get("/saved", function (req, res) {
+	// Go into the mongo collection, and find all docs where "read" is true
+	db.scrapedArticle.find({ saved: true }, function (error, found) {
+		// Show any errors
+		if (error) {
+			console.log(error);
+		}
+		else {
+			// Otherwise, send the books we found to the browser as a json
 			console.log(found)
 			res.json(found);
-			
-    }
-  });
+
+		}
+	});
 });
 
 app.get("/scrape", function (req, res) {
@@ -117,6 +117,28 @@ app.get("/scrape", function (req, res) {
 	});
 });
 
+//==================================//
+app.delete("/deleteArticle/:id", function (req, res) {
+	db.scrapedArticle.remove(
+		{
+			_id: mongojs.ObjectId(req.params.id)
+
+		},
+		function (error, edited) {
+			// show any errors
+			if (error) {
+				console.log(error);
+				res.send(error);
+			}
+			else {
+				// Otherwise, send the result of our update to the browser
+				console.log(edited);
+				res.send(edited);
+			}
+		}
+	);
+});
+
 app.put("/savedArticle/:id", function (req, res) {
 	// Remember: when searching by an id, the id needs to be passed in
 	// as (mongojs.ObjectId(IdYouWantToFind))
@@ -153,6 +175,9 @@ app.put("/savedArticle/:id", function (req, res) {
 app.get("/", function (req, res) {
 	res.render("public/index.html");
 });
+
+
+
 app.listen(PORT, function () {
 	console.log("listening on port 4000, http://localhost:" + PORT)
 });

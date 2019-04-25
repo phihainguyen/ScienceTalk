@@ -44,7 +44,16 @@ $(document).on("click", ".markedSave", function() {
   getSaved();
 });
 //===============================//
+$(document).on("click", ".deleteArticle", function() {
+  // alert("clicked saved")
+  var thisId = $(this).attr("data-id");
+  $.ajax({
+    type: "DELETE",
+    url: "/deleteArticle/" + thisId
+  });
+  $(this).parents("tr").remove();
 
+});
 // function displayResults(articles) {
 //     // First, empty the table
 //     $(".tbody").empty();
@@ -77,7 +86,7 @@ function getSaved() {
     $.getJSON("/saved", function(data) {
       for (var i = 0; i < data.length; i++) {
         $("#save").prepend("<tr><td>" + data[i].title + "</td><td>" +"<a href='" +data[i].link +"'>Links to Articles</a>"+
-          "</td><td><button class='deleteArticle' data-id='" + data[i]._id + "'>Delete Article</button></td></tr>");
+          "</td><td><button class='comment' data-id='" + data[i]._id + "'>Comment</button></td><td><button class='deleteArticle' data-id='" + data[i]._id + "'>Delete Article</button></td></tr>");
       }
       // $("#unsave").prepend
       // ("<tr><th>Title</th><th>Link</th><th>Saved Article</th></tr>");
