@@ -29,8 +29,20 @@ $(document).on("click", ".markedSave", function() {
       url: "/savedArticle/" + thisId
     });
     $(this).parents("tr").remove();
-    getSaved();
+    // getSaved();
   });
+//===============================//
+ //=========================//
+ $(document).on("click", "#saver", function() {
+  // alert("clicked saved")
+  var thisId = $(this).attr("data-id");
+  $.ajax({
+    type: "PUT",
+    url: "/savedArticle/" + thisId
+  });
+  $(this).parents("tr").remove();
+  getSaved();
+});
 //===============================//
 
 // function displayResults(articles) {
