@@ -12,7 +12,7 @@ app.use(express.static("public"));
 
 var PORT = process.env.PORT || 4000;
 
-var databaseUrl = "scienceDB";
+var databaseUrl = process.env.MONGODB_URI||"scienceDB";
 var collections = ["scrapedArticle"];
 
 
@@ -21,21 +21,7 @@ db.on("error", function (error) {
 	console.log("Database Error:", error);
 });
 
-// app.use(express.static("public"));
-// require("./routes/apiRoutes.js")
 
-// app.get("/all", function (req, res) {
-// 	db.scrapedArticle.find({}, function (error, found) {
-// 		// Throw any errors to the console
-// 		if (error) {
-// 			console.log(error);
-// 		}
-// 		// If there are no errors, send the data to the browser as json
-// 		else {
-// 			res.json(found);
-// 		}
-// 	});
-// });
 app.get("/saved", function (req, res) {
 	// Go into the mongo collection, and find all docs where "read" is true
 	db.scrapedArticle.find({ saved: true }, function (error, found) {
@@ -85,7 +71,8 @@ app.get("/scrape", function (req, res) {
 				db.scrapedArticle.insert({
 					title: title,
 					link: link,
-					saved: false
+					saved: false,
+					comment: ""
 				},
 					function (err, inserted) {
 						if (err) {
@@ -180,24 +167,38 @@ app.get("/", function (req, res) {
 });
 
 // Route for saving/updating an Article's associated Note
-app.post("/articles/:id", function(req, res) {
-	// Create a new note and pass the req.body to the entry
-	db.Note.create(req.body)
-	  .then(function(dbNote) {
-		// If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
-		// { new: true } tells the query that we want it to return the updated User -- it returns the original by default
-		// Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-		return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
-	  })
-	  .then(function(dbArticle) {
-		// If we were able to successfully update an Article, send it back to the client
-		res.json(dbArticle);
-	  })
-	  .catch(function(err) {
-		// If an error occurred, send it to the client
-		res.json(err);
-	  });
+app.post("/comment/:id", function(req, res) {
+	// When searching by an id, the id needs to be passed in
+	// as (mongojs.ObjectId(IdYouWantToFind))
+  
+	// Update the note that matches the object id
+	db.scrapedArticle.update(
+	  {
+		_id: mongojs.ObjectId(req.params.id)
+	  },
+	  {
+		// Set the title, note and modified parameters
+		// sent in the req body.
+		$set: {
+		  comment: req.body.comment,
+		}
+	  },
+	  function(error, edited) {
+		// Log any errors from mongojs
+		if (error) {
+		  console.log(error);
+		  res.send(error);
+		}
+		else {
+		  // Otherwise, send the mongojs response to the browser
+		  // This will fire off the success function of the ajax request
+		  console.log(edited);
+		  res.send(edited);
+		}
+	  }
+	);
   });
+
 
 app.listen(PORT, function () {
 	console.log("listening on port 4000, http://localhost:" + PORT)

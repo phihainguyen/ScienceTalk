@@ -62,13 +62,13 @@ $(document).on("click", ".comment", function () {
     method: "POST",
     url: "/articles/" + thisId,
     data: {
-    
+
       // Value taken from note textarea
       body: $("#exampleFormControlTextarea1").val()
     }
   })
     // With that done
-    .then(function(data) {
+    .then(function (data) {
       // Log the response
       console.log(data);
       // Empty the notes section
@@ -76,7 +76,7 @@ $(document).on("click", ".comment", function () {
     });
 
   // Also, remove the values entered in the input and textarea for note entry
- 
+
   $("#exampleFormControlTextarea1").val("");
 
 });
@@ -88,9 +88,26 @@ $(document).on("click", "#closeBtn", function () {
   var thisId = $(this).val().trim();
   console.log(thisId)
   $.ajax({
-    type: "PUT",
-    url: "/comment/" + thisId
-  });
+    type: "POST",
+    url: "/comment/" +
+      selected.attr("data-id"),
+    dataType: "json",
+    data: {
+      note: $("#exampleFormControlTextarea1").val()
+    },
+    // On successful call
+    success: function (data) {
+      $("#exampleFormControlTextarea1").val("");
+      $.ajax({
+        type: "GET",
+        url: "/find/" + selected.attr("data-id"),
+        // On a successful call, clear the #results section
+        success: function(data) {
+    var notesmsgnew = $("<div>");
+    notesmsgnew.attr("class", "notesmsgnew")
+    notesaveddiv.prepend(notesmsgnew);
+    notesmsgnew.text(data.note);
+    });
   createComment();
 })
 
