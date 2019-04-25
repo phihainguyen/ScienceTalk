@@ -56,19 +56,33 @@ $(document).on("click", ".deleteArticle", function () {
 });
 
 //===============================//
+//RETIREVING PAST COMMENT//
 $(document).on("click", ".comment", function () {
-  // alert("clicked to make comment")
-  var thisId = $(this).attr("data-id");
   $.ajax({
-    type: "PUT",
-    url: "/comment/" + thisId
-  });
+    method: "POST",
+    url: "/articles/" + thisId,
+    data: {
+    
+      // Value taken from note textarea
+      body: $("#exampleFormControlTextarea1").val()
+    }
+  })
+    // With that done
+    .then(function(data) {
+      // Log the response
+      console.log(data);
+      // Empty the notes section
+      // $("#notes").empty();
+    });
 
-
-
-  // $(this).parents("tr").remove();
+  // Also, remove the values entered in the input and textarea for note entry
+ 
+  $("#exampleFormControlTextarea1").val("");
 
 });
+
+//===============================//
+//Creating new COMMENT//
 
 $(document).on("click", "#closeBtn", function () {
   var thisId = $(this).val().trim();
@@ -107,8 +121,18 @@ $("#scraper").on("click", function () {
 });
 
 function createComment() {
+  $.postJSON("/saved", function (data) {
+    for (var i = 0; i < data.length; i++) {
+      $("#save").prepend("<tr><td>" + data[i].title + "</td><td>" + "<a href='" + data[i].link + "'>Links to Articles</a>" + "</td><td><button type='button' class='btn btn-info comment' data-toggle='modal' data-target='#myModal' data-id='" + data[i]._id + "'>Comment</button></td><td><button class='deleteArticle btn btn-danger' data-id='" + data[i]._id + "'>Delete Article</button></td></tr>");
 
+      $(".modal-title").text(data[i].title);
+
+    }
+    // $("#unsave").prepend
+    // ("<tr><th>Title</th><th>Link</th><th>Saved Article</th></tr>");
+  });
 }
+
 function getSaved() {
   $("#save").empty();
   $.getJSON("/saved", function (data) {
