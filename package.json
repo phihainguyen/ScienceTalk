@@ -18,7 +18,8 @@
     "mongoose": "*",
     "axios": "*",
     "cheerio": "*",
-    "mongojs": "*"
+    "mongojs": "*",
+    "morgan": "*"
   },
   "license": "ISC",
   "bugs": {
