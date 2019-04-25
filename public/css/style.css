@@ -1,0 +1,41 @@
+body{
+    background-image: url(https://cdn.worldsciencefestival.com/wp-content/uploads/2017/03/PERCEPTIONS_OF_SCIENCE_800x494.jpg);
+    background-size: cover;
+    margin: auto;
+}
+.jumbotron{
+    opacity: 0.8;
+    width: 85%;
+    margin: auto;
+    background: black;
+    color: white;
+}
+#save{
+    margin: auto;
+    background: rgba(0, 0, 0, 0.548);
+    color: white;
+    padding: 20px;
+    width: 86%;
+  
+}
+#unsave{
+    margin: auto;
+    background: rgba(0, 0, 0, 0.548);
+    color: white;
+    padding: 20px;
+    width: 86%;
+    
+}
+tr{
+    padding: 20px;
+      
+}
+td{
+    padding: 10px;
+
+}
+#results{
+    padding: 20px;
+   
+    margin: auto;
+}

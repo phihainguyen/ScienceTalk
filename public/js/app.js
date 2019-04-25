@@ -11,29 +11,29 @@
 
 //=====================//
 function getUnsaved() {
-    $("#unsave").empty();
-    $.getJSON("/scrape", function(data) {
-      for (var i = 0; i < data.length; i++) {
-        $("#unsave").prepend("<tr><td>" + data[i].title + "</td><td>" + "<a href='" +data[i].link +"'>Links to Articles</a>"+
-          "</td><td class='savedArticle'><button class='markedSave' data-id='" + data[i]._id + "'>Mark Save</button></td></tr>");
-      }
-      $("#save").prepend("<tr><th>Title</th><th>Link</th><th>Saved Article</th></tr>");
-    });
-  }
-  //=========================//
-$(document).on("click", ".markedSave", function() {
-    // alert("clicked saved")
-    var thisId = $(this).attr("data-id");
-    $.ajax({
-      type: "PUT",
-      url: "/savedArticle/" + thisId
-    });
-    $(this).parents("tr").remove();
-    // getSaved();
+  $("#unsave").empty();
+  $.getJSON("/scrape", function (data) {
+    for (var i = 0; i < data.length; i++) {
+      $("#unsave").prepend("<tr><td>" + data[i].title + "</td><td>" + "<a href='" + data[i].link + "'>Links to Articles</a>" +
+        "</td><td class='savedArticle'><button class='markedSave btn btn-success' data-id='" + data[i]._id + "'>Mark Save</button></td></tr>");
+    }
+    $("#unsave").prepend("<tr><th>Title</th><th>Link</th><th>Saved Article</th></tr>");
   });
+}
+//=========================//
+$(document).on("click", ".markedSave", function () {
+  // alert("clicked saved")
+  var thisId = $(this).attr("data-id");
+  $.ajax({
+    type: "PUT",
+    url: "/savedArticle/" + thisId
+  });
+  $(this).parents("tr").remove();
+  // getSaved();
+});
 //===============================//
- //=========================//
- $(document).on("click", "#saver", function() {
+//=========================//
+$(document).on("click", "#saver", function () {
   // alert("clicked saved")
   var thisId = $(this).attr("data-id");
   $.ajax({
@@ -44,7 +44,7 @@ $(document).on("click", ".markedSave", function() {
   getSaved();
 });
 //===============================//
-$(document).on("click", ".deleteArticle", function() {
+$(document).on("click", ".deleteArticle", function () {
   // alert("clicked saved")
   var thisId = $(this).attr("data-id");
   $.ajax({
@@ -54,6 +54,32 @@ $(document).on("click", ".deleteArticle", function() {
   $(this).parents("tr").remove();
 
 });
+
+//===============================//
+$(document).on("click", ".comment", function () {
+  // alert("clicked to make comment")
+  var thisId = $(this).attr("data-id");
+  $.ajax({
+    type: "PUT",
+    url: "/comment/" + thisId
+  });
+
+
+
+  // $(this).parents("tr").remove();
+
+});
+
+$(document).on("click", "#closeBtn", function () {
+  var thisId = $(this).val().trim();
+  console.log(thisId)
+  $.ajax({
+    type: "PUT",
+    url: "/comment/" + thisId
+  });
+  createComment();
+})
+
 // function displayResults(articles) {
 //     // First, empty the table
 //     $(".tbody").empty();
@@ -72,25 +98,28 @@ $(document).on("click", ".deleteArticle", function() {
 // }
 $("#scraper").on("click", function () {
 
-    // // Do an api call to the back end for json with all animals sorted by weight
-    // $.getJSON("/scrape", function (data) {
-    //     // Call our function to generate a table body
-    //     displayResults(data);
-    // });
-    getUnsaved();
+  // // Do an api call to the back end for json with all animals sorted by weight
+  // $.getJSON("/scrape", function (data) {
+  //     // Call our function to generate a table body
+  //     displayResults(data);
+  // });
+  getUnsaved();
 });
 
+function createComment() {
 
+}
 function getSaved() {
-    $("#save").empty();
-    $.getJSON("/saved", function(data) {
-      for (var i = 0; i < data.length; i++) {
-        $("#save").prepend("<tr><td>" + data[i].title + "</td><td>" +"<a href='" +data[i].link +"'>Links to Articles</a>"+
-          "</td><td><button class='comment' data-id='" + data[i]._id + "'>Comment</button></td><td><button class='deleteArticle' data-id='" + data[i]._id + "'>Delete Article</button></td></tr>");
-      }
-      // $("#unsave").prepend
-      // ("<tr><th>Title</th><th>Link</th><th>Saved Article</th></tr>");
-    });
-    // console.log(data);
-  }
- 
+  $("#save").empty();
+  $.getJSON("/saved", function (data) {
+    for (var i = 0; i < data.length; i++) {
+      $("#save").prepend("<tr><td>" + data[i].title + "</td><td>" + "<a href='" + data[i].link + "'>Links to Articles</a>" + "</td><td><button type='button' class='btn btn-info comment' data-toggle='modal' data-target='#myModal' data-id='" + data[i]._id + "'>Comment</button></td><td><button class='deleteArticle btn btn-danger' data-id='" + data[i]._id + "'>Delete Article</button></td></tr>");
+
+      $(".modal-title").text(data[i].title);
+
+    }
+    // $("#unsave").prepend
+    // ("<tr><th>Title</th><th>Link</th><th>Saved Article</th></tr>");
+  });
+  // console.log(data);
+}

@@ -118,6 +118,9 @@ app.get("/scrape", function (req, res) {
 });
 
 //==================================//
+//DELETING THE ARTICLES
+//==================================//
+
 app.delete("/deleteArticle/:id", function (req, res) {
 	db.scrapedArticle.remove(
 		{
