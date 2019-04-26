@@ -129,6 +129,28 @@ app.delete("/deleteArticle/:id", function (req, res) {
 	);
 });
 
+
+//============================//
+app.get("/articlenote/:id", function (req, res) {
+	db.scrapedArticle.findOne(
+		{
+			_id: req.params.id
+
+		},
+		function (error, article) {
+			// show any errors
+			if (error) {
+				console.log(error);
+				res.send(error);
+			}
+			else {
+				// Otherwise, send the result of our update to the browser
+				console.log(edited);
+				res.send(article);
+			}
+		}
+	);
+});
 app.put("/savedArticle/:id", function (req, res) {
 	// Remember: when searching by an id, the id needs to be passed in
 	// as (mongojs.ObjectId(IdYouWantToFind))
